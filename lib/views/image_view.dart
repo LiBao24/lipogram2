@@ -63,8 +63,7 @@ class _ImageViewState extends State<ImageView> {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage(
-                        'assets/images/profile3.jpg'), 
+                    backgroundImage: AssetImage('assets/images/profile3.jpg'),
                     radius: 25,
                   ),
                   SizedBox(width: 10),
@@ -82,12 +81,11 @@ class _ImageViewState extends State<ImageView> {
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: widget.images.length, // Sesuaikan dengan jumlah postingan pengguna
+              itemCount: widget.images.length,
               itemBuilder: (context, index) {
-                // Variabel untuk status like, jumlah like, dan caption per gambar
                 RxBool isLikedForThisPost = RxBool(false);
-                RxInt likesForThisPost = RxInt(0);
-                RxString captionForThisPost = RxString('----'); // Caption terpisah per gambar
+                RxInt likesForThisPost = RxInt(500);
+                RxString captionForThisPost = RxString('----');
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,24 +98,22 @@ class _ImageViewState extends State<ImageView> {
                       width: double.infinity,
                     ),
                     const SizedBox(height: 10),
-                    // Caption
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Obx(() => Text(
-                            captionForThisPost.value, // Menampilkan caption yang terpisah untuk setiap gambar
+                            captionForThisPost.value,
                             style: const TextStyle(fontSize: 16),
                           )),
                     ),
                     const SizedBox(height: 10),
-                    // Post Statistics (Like and Comment buttons)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         children: [
-                          // Like Button
                           IconButton(
                             onPressed: () {
-                              isLikedForThisPost.value = !isLikedForThisPost.value;
+                              isLikedForThisPost.value =
+                                  !isLikedForThisPost.value;
                               if (isLikedForThisPost.value) {
                                 likesForThisPost.value++;
                               } else {
@@ -133,9 +129,9 @@ class _ImageViewState extends State<ImageView> {
                           ),
                           // Number of Likes
                           Obx(() => Text(
-                                '${likesForThisPost.value} likes',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              )),
+      '${likesForThisPost.value} likes',
+      style: const TextStyle(fontWeight: FontWeight.bold),
+    )),
                           const SizedBox(width: 16),
                           // Comment Button
                           IconButton(
@@ -146,8 +142,9 @@ class _ImageViewState extends State<ImageView> {
                           ),
                           // Number of Comments
                           Obx(() => Text(
-                                '${comments.value} comments',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                '${comments.value} Komentar',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               )),
                         ],
                       ),
