@@ -110,6 +110,7 @@ class HomeView extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) =>  CommentBottomSheet(),
                       );
+
                     },
                     icon: const Icon(Icons.comment),
                   ),
