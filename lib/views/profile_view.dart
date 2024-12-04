@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/user_model.dart';
 import 'image_view.dart';
-import 'search_view.dart'; // Import SearchView jika belum diimport
+import 'search_view.dart'; 
 
 class ProfileView extends StatelessWidget {
   final User user;
@@ -45,7 +45,7 @@ class ProfileView extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -53,7 +53,7 @@ class ProfileView extends StatelessWidget {
                     user.fullName,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 18),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -73,8 +73,8 @@ class ProfileView extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                crossAxisSpacing: 3,
-                mainAxisSpacing: 1,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
               ),
               itemCount: user.images.length,
               itemBuilder: (context, index) {

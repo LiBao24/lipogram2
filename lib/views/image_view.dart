@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'search_view.dart';
 
 class ImageView extends StatefulWidget {
   final List<String> images; // List of image paths for the posts
@@ -17,9 +18,7 @@ class ImageView extends StatefulWidget {
 
 class _ImageViewState extends State<ImageView> {
   late PageController _pageController;
-  RxBool isLiked = false.obs; 
-  RxInt likes = 0.obs; 
-  RxInt comments = 0.obs; 
+  RxInt comments = 0.obs;
 
   @override
   void initState() {
@@ -54,7 +53,7 @@ class _ImageViewState extends State<ImageView> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SingleChildScrollView( 
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -64,7 +63,8 @@ class _ImageViewState extends State<ImageView> {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/profile3.jpg'), // Profile image
+                    backgroundImage: AssetImage(
+                        'assets/images/profile3.jpg'), 
                     radius: 25,
                   ),
                   SizedBox(width: 10),
@@ -78,13 +78,17 @@ class _ImageViewState extends State<ImageView> {
                 ],
               ),
             ),
-            
-            // Post Images - Loop through the images
+
             ListView.builder(
-              shrinkWrap: true, // Allow the ListView to take only the space it needs
-              physics: NeverScrollableScrollPhysics(), // Disable scrolling on the ListView so the parent scrolls
-              itemCount: widget.images.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: widget.images.length, // Sesuaikan dengan jumlah postingan pengguna
               itemBuilder: (context, index) {
+                // Variabel untuk status like, jumlah like, dan caption per gambar
+                RxBool isLikedForThisPost = RxBool(false);
+                RxInt likesForThisPost = RxInt(0);
+                RxString captionForThisPost = RxString('----'); // Caption terpisah per gambar
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -97,12 +101,12 @@ class _ImageViewState extends State<ImageView> {
                     ),
                     const SizedBox(height: 10),
                     // Caption
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        '........', // Placeholder caption
-                        style: TextStyle(fontSize: 16),
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Obx(() => Text(
+                            captionForThisPost.value, // Menampilkan caption yang terpisah untuk setiap gambar
+                            style: const TextStyle(fontSize: 16),
+                          )),
                     ),
                     const SizedBox(height: 10),
                     // Post Statistics (Like and Comment buttons)
@@ -113,21 +117,23 @@ class _ImageViewState extends State<ImageView> {
                           // Like Button
                           IconButton(
                             onPressed: () {
-                              isLiked.value = !isLiked.value;
-                              if (isLiked.value) {
-                                likes.value++;
+                              isLikedForThisPost.value = !isLikedForThisPost.value;
+                              if (isLikedForThisPost.value) {
+                                likesForThisPost.value++;
                               } else {
-                                likes.value--;
+                                likesForThisPost.value--;
                               }
                             },
                             icon: Obx(() => Icon(
                                   Icons.favorite,
-                                  color: isLiked.value ? Colors.red : Colors.grey,
+                                  color: isLikedForThisPost.value
+                                      ? Colors.red
+                                      : Colors.grey,
                                 )),
                           ),
                           // Number of Likes
                           Obx(() => Text(
-                                '${likes.value} likes',
+                                '${likesForThisPost.value} likes',
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               )),
                           const SizedBox(width: 16),
@@ -150,18 +156,19 @@ class _ImageViewState extends State<ImageView> {
                   ],
                 );
               },
-            ),
+            )
           ],
         ),
       ),
       // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1, // Search = index 1 (untuk halaman ini, halaman ImageView)
+        currentIndex: 4, // Profile = index 4
         onTap: (index) {
           if (index == 0) {
             Get.toNamed('/home');
           } else if (index == 1) {
-            // Stay on ImageView page
+            // Pindah ke Search
+            Get.to(() => const SearchView());
           } else if (index == 2) {
             Get.toNamed('/addPost');
           } else if (index == 3) {
