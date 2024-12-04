@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lipogram/controllers/home_controller.dart';
+import 'comment_bottom_sheet.dart'; // Import untuk komentar
+import 'likes_bottom_sheet.dart'; // Import untuk daftar like
+
 
 class HomeView extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -17,7 +20,7 @@ class HomeView extends StatelessWidget {
           'lipogram',
           style: TextStyle(
             color: Colors.black,
-            fontFamily: 'Arial',
+            fontFamily: 'Inter',
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -25,82 +28,106 @@ class HomeView extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Profil
-              const Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Profil
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Row(
                 children: [
                   CircleAvatar(
                     backgroundImage:
-                        AssetImage('assets/profil-nashya.jpg'), // Profil image
-                    radius: 30,
+                        AssetImage('assets/profile/nashya.png'), // Profil image
+                    radius: 25,
                   ),
                   SizedBox(width: 10),
                   Text(
                     'nashya',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+            ),
+            // Gambar Postingan
+            Image.asset(
+              'assets/post-nashya.png',
+              fit: BoxFit.cover,
+              height: 400,
+              width: double.infinity, // Lebar penuh
+            ),
+            const SizedBox(height: 10),
 
-              // Gambar Postingan
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  'assets/post-nashya.jpg',
-                  fit: BoxFit.cover,
-                  height: 250,
-                  width: double.infinity,
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              // Caption
-              const Text(
+            // Caption
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
                 'Moments framed in time.',
                 style: TextStyle(fontSize: 16),
               ),
-              const SizedBox(height: 10),
+            ),
+            const SizedBox(height: 10),
 
-              // Statistik (Likes dan Comments)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // Statistik, Tombol Like, dan Komentar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
                 children: [
-                  Obx(() => Text(
-                        '${homeController.likes.value} likes',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                  // Tombol Love
+                  Obx(() => IconButton(
+                        onPressed: homeController.toggleLike,
+                        icon: Icon(
+                          Icons.favorite,
+                          color: homeController.isLiked.value
+                              ? Colors.red
+                              : Colors.grey,
+                        ),
                       )),
+
+                  // Jumlah Likes
+                  GestureDetector(
+                    onTap: () {
+                      // Menampilkan daftar likes dalam modal bottom sheet
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => const LikesBottomSheet(),
+                      );
+                    },
+                    child: Obx(() => Text(
+                          '${homeController.likes.value} likes',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                  ),
+                  const SizedBox(width: 16),
+
+                  // Tombol Komentar
+                  IconButton(
+                    onPressed: () {
+                      // Menampilkan komentar dalam modal bottom sheet
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) =>  CommentBottomSheet(),
+                      );
+
+                    },
+                    icon: const Icon(Icons.comment),
+                  ),
+                  // Jumlah Komentar
                   Obx(() => Text(
                         '${homeController.comments.value} comments',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       )),
                 ],
               ),
-              const SizedBox(height: 10),
-
-              // Tombol Like
-              ElevatedButton.icon(
-                onPressed: homeController.likePost,
-                icon: const Icon(Icons.favorite, color: Colors.red),
-                label: const Text("Like"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.red,
-                  side: const BorderSide(color: Colors.red),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
+        currentIndex: 0, // Home = index 0
         onTap: (index) {
           if (index == 0) {
             // Pindah ke Home

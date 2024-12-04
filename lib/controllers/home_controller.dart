@@ -1,11 +1,31 @@
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  var likes = 500.obs; // Jumlah likes
-  var comments = 260.obs; // Jumlah komentar
+  var likesList = <Map<String, String>>[].obs;
+  var commentsList = <Map<String, String>>[].obs;
 
-  // Fungsi untuk menambah jumlah likes
-  void likePost() {
-    likes.value++;
+  var isLiked = false.obs;
+  var likes = 0.obs;
+  var comments = 0.obs;
+
+  void toggleLike() {
+    if (isLiked.value) {
+      isLiked.value = false;
+      likes.value--;
+      likesList.removeWhere((user) => user['username'] == 'its_ivyyyy');
+    } else {
+      isLiked.value = true;
+      likes.value++;
+      likesList.add({
+        'username': 'its_ivyyyy',
+        'profilePic': 'assets/profile/user3.png',
+      });
+    }
   }
+
+  void addComment(Map<String, String> comment) {
+    commentsList.add(comment);
+    comments.value++;
+  }
+
 }

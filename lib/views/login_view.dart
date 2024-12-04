@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lipogram/controllers/login_controller.dart';
+import 'package:lipogram/views/signup_view.dart';
 import 'package:lipogram/views/home_view.dart';
 
 class LoginView extends StatelessWidget {
@@ -67,7 +68,7 @@ class LoginView extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 50),
@@ -166,7 +167,7 @@ class LoginView extends StatelessWidget {
                   const Spacer(),
                   OutlinedButton(
                     onPressed: () {
-                      // Get.to(() => SignUpPage());
+                      Get.to(() => SignUpView());
                     },
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
