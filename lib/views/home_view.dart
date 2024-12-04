@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/home_controller.dart';
+import 'package:lipogram/controllers/home_controller.dart';
 import 'comment_bottom_sheet.dart'; // Import untuk komentar
 import 'likes_bottom_sheet.dart'; // Import untuk daftar like
+
 
 class HomeView extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
