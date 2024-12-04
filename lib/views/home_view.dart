@@ -191,7 +191,7 @@ class HomeView extends StatelessWidget {
             ),
             // Gambar Postingan
             Image.asset(
-              'assets/post-nashya.png',
+              'assets/post-nashya.jpg',
               fit: BoxFit.cover,
               height: 400,
               width: double.infinity, // Lebar penuh

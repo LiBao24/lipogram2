@@ -20,7 +20,7 @@ class HomeController extends GetxController {
       likes.value++;
       likesList.add({
         'username': 'its_ivyyyy',
-        'profilePic': 'assets/profile/user3.png',
+        'profilePic': 'assets/profil-ivy.jpg',
       });
     }
   }
