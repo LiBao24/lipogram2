@@ -1,17 +1,36 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lipogram/controllers/home_controller.dart';
+import 'package:lipogram/controllers/profile_controller.dart';
 import 'comment_bottom_sheet.dart'; // Import untuk komentar
 import 'likes_bottom_sheet.dart'; // Import untuk daftar like
 
-
 class HomeView extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
+  final ProfileController profileController =
+      Get.put(ProfileController()); // Ambil ProfileController
 
   HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Terima data dari arguments
+    final Map<String, dynamic>? args = Get.arguments;
+    final File? photo = args?['photo']; // Foto yang dikirim
+    final String? description = args?['description']; // Deskripsi yang dikirim
+
+    // Jika ada foto & deskripsi, tandai sebagai postingan baru
+    if (photo != null && description != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        homeController.createPost(); // Tandai bahwa postingan telah dibuat
+      });
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        homeController.deletePost(); // Hapus status postingan jika data kosong
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -32,13 +51,131 @@ class HomeView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Profil
+            Obx(() {
+              if (!homeController.hasPost.value) {
+                return const SizedBox(); // Jangan tampilkan apa pun jika belum ada post
+              }
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Profil
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Obx(() {
+                          return CircleAvatar(
+                            backgroundImage: profileController
+                                    .profileImage.value
+                                    .contains('assets/')
+                                ? AssetImage(
+                                        profileController.profileImage.value)
+                                    as ImageProvider
+                                : FileImage(
+                                    File(profileController.profileImage.value)),
+                            radius: 25,
+                          );
+                        }),
+                        const SizedBox(width: 10),
+                        Obx(() {
+                          return Text(
+                            profileController.username.value,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Inter',
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+
+                  // Foto Postingan
+                  if (photo != null)
+                    Image.file(
+                      photo,
+                      width: double.infinity,
+                      height: 400,
+                      fit: BoxFit.cover,
+                    ),
+
+                  // Caption
+                  if (description != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        description,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  const SizedBox(height: 10),
+
+                  // Statistik, Tombol Like, dan Komentar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      children: [
+                        Obx(() => IconButton(
+                              onPressed: homeController.toggleLike,
+                              icon: Icon(
+                                Icons.favorite,
+                                color: homeController.isLiked.value
+                                    ? Colors.red
+                                    : Colors.grey,
+                              ),
+                            )),
+
+                        // Jumlah Likes
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  const LikesBottomSheet(),
+                            );
+                          },
+                          child: Obx(() => Text(
+                                '${homeController.likes.value} likes',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              )),
+                        ),
+                        const SizedBox(width: 16),
+
+                        // Tombol Komentar
+                        IconButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  CommentBottomSheet(),
+                            );
+                          },
+                          icon: const Icon(Icons.comment),
+                        ),
+                        Obx(() => Text(
+                              '${homeController.comments.value} comments',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }),
+
+            // Profil
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: Row(
                 children: [
                   CircleAvatar(
                     backgroundImage:
-                        AssetImage('assets/profile/nashya.png'), // Profil image
+                        AssetImage('assets/profil-nashya.jpg'), // Profil image
                     radius: 25,
                   ),
                   SizedBox(width: 10),
@@ -93,7 +230,8 @@ class HomeView extends StatelessWidget {
                       // Menampilkan daftar likes dalam modal bottom sheet
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) => const LikesBottomSheet(),
+                        builder: (BuildContext context) =>
+                            const LikesBottomSheet(),
                       );
                     },
                     child: Obx(() => Text(
@@ -109,9 +247,8 @@ class HomeView extends StatelessWidget {
                       // Menampilkan komentar dalam modal bottom sheet
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) =>  CommentBottomSheet(),
+                        builder: (BuildContext context) => CommentBottomSheet(),
                       );
-
                     },
                     icon: const Icon(Icons.comment),
                   ),

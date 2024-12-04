@@ -4,6 +4,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lipogram/views/home_view.dart';
+import 'package:lipogram/controllers/profile_controller.dart';
 
 class PhotoController extends GetxController {
   var galleryPhotos = <File>[].obs; // Daftar foto dalam bentuk File
@@ -105,11 +106,15 @@ class PhotoController extends GetxController {
   // Fungsi untuk membagikan
   void sharePhoto() {
     if (selectedPhoto.value != null && photoDescription.value.isNotEmpty) {
-      print('Foto: ${selectedPhoto.value}');
-      print('Deskripsi: ${photoDescription.value}');
-      // Kirim data ke halaman HomePage
+      // Ambil instance ProfileController
+      final profileController = Get.put(ProfileController());
       Get.to(HomeView(), arguments: {
         'photo': selectedPhoto.value,
+        'description': photoDescription.value,
+      });
+      // Tambahkan postingan baru ke profil
+      profileController.addPost({
+        'photo': selectedPhoto.value!.path,
         'description': photoDescription.value,
       });
     } else {
