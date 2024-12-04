@@ -71,7 +71,7 @@ class ProfileView extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                crossAxisSpacing: 2,
+                crossAxisSpacing: 3,
                 mainAxisSpacing: 1,
               ),
               itemCount: user.images.length,
