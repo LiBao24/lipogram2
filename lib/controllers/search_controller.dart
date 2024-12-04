@@ -72,7 +72,7 @@ class SearchController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Inisialisasi riwayat pencarian dengan semua pengguna
+
     recentSearches.value = [...allUsers];
   }
 
