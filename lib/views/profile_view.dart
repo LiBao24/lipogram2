@@ -1,9 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lipogram/controllers/profile_controller.dart';
 import 'package:lipogram/views/edit_profile_view.dart';
 import 'package:lipogram/views/login_view.dart';
-import 'dart:io';
 
 class ProfileView extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
@@ -52,7 +52,7 @@ class ProfileView extends StatelessWidget {
                     controller.username.value,
                     style: const TextStyle(
                       color: Colors.black,
-                      fontFamily: 'Arial',
+                      fontFamily: 'Inter',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -195,13 +195,20 @@ class ProfileView extends StatelessWidget {
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5,
                     ),
-                    itemCount: controller.photos.length,
+                    itemCount: controller.postDetails.length,
                     itemBuilder: (context, index) {
+                      final post = controller.postDetails[index];
+                      final photo = post['photo']!;
                       return ClipRRect(
-                        child: Image.asset(
-                          controller.photos[index],
-                          fit: BoxFit.cover,
-                        ),
+                        child: photo.contains('assets/')
+                            ? Image.asset(
+                                photo,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(photo),
+                                fit: BoxFit.cover,
+                              ),
                       );
                     },
                   )),

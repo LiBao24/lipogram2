@@ -8,11 +8,22 @@ class ProfileController extends GetxController {
   var posts = 10.obs; // Example data
   var followers = '500'.obs; // Example data
   var following = 150.obs; // Example data
-  var photos =
-      ['assets/photo1.jpg', 'assets/photo2.jpg', 'assets/photo3.jpg'].obs;
-  var profileImage = 'assets/image/profile.png'.obs;
+  var photos = [
+    'assets/post-ivy-1.jpg',
+    'assets/post-ivy-2.jpg',
+    'assets/post-ivy-3.jpg'
+  ].obs;
+  var profileImage = 'assets/profil-ivy.jpg'.obs;
 
-  // Method to update profile data
+  var postDetails = <Map<String, String>>[].obs; // Menyimpan detail postingan
+
+  ProfileController() {
+    // Tambahkan postingan awal ke postDetails
+    for (var photo in photos) {
+      postDetails.add({'photo': photo});
+    }
+    posts.value = postDetails.length; // Perbarui jumlah postingan
+  }
   void updateProfile(String newName, String newUsername, String newBio,
       String newProfileImage) {
     name.value = newName;
@@ -20,4 +31,12 @@ class ProfileController extends GetxController {
     bio.value = newBio;
     profileImage.value = newProfileImage;
   }
+
+  // Fungsi untuk menambahkan postingan baru
+  void addPost(Map<String, String> post) {
+    postDetails.insert(0, post); // Tambahkan postingan di awal daftar
+    photos.insert(0, post['photo']!); // Tambahkan foto di awal daftar
+    posts.value = postDetails.length; // Perbarui jumlah postingan
+  }
+
 }
