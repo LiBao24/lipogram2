@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'views/login_view.dart';
@@ -8,6 +7,7 @@ import 'package:lipogram/views/photo_view.dart';
 import 'package:lipogram/views/posting_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:lipogram/views/signup_view.dart';
+import 'package:lipogram/views/notification_view.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/addPost', page: () => PhotoPickerScreen()),
         GetPage(name: '/addPost2', page: () => ShareScreen()),
         GetPage(name: '/profile', page: () => ProfileView()),
+        GetPage(name: '/notifications', page: () => NotificationView()),
         GetPage(name: '/signup', page: () => SignUpView()),
       ],
     );

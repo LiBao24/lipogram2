@@ -41,38 +41,38 @@ class NotificationController extends GetxController {
       username: 'nashya',
       action: 'mulai mengikuti Anda',
       timestamp: DateTime.now().subtract(Duration(days: 14)), // 2 minggu lalu
-      profileImageUrl: 'assets/profile/nashya.png', // Gambar dari assets
+      profileImageUrl: 'assets/profil-nashya.jpg', // Gambar dari assets
     ),
     NotificationItem(
       username: 'lie_p01',
       action: 'mulai mengikuti Anda',
       timestamp: DateTime.now().subtract(Duration(days: 10)), // 10 hari lalu
-      profileImageUrl: 'assets/profile/liepo.png', // Gambar dari assets
+      profileImageUrl: 'assets/profil-nashya.jpg', // Gambar dari assets
     ),
     NotificationItem(
       username: 'naila',
       action: 'menyukai postingan Anda',
       timestamp: DateTime.now().subtract(Duration(hours: 5)), // 5 jam lalu
-      profileImageUrl: 'assets/profile/naila.png', // Gambar dari assets
+      profileImageUrl: 'assets/profil-nashya.jpg', // Gambar dari assets
     ),
     NotificationItem(
       username: 'cars3nn_',
       action: 'menyukai postingan Anda',
       timestamp:
           DateTime.now().subtract(Duration(minutes: 30)), // 30 menit lalu
-      profileImageUrl: 'assets/profile/carsen.png', // Gambar dari assets
+      profileImageUrl: 'assets/profil-nashya.jpg', // Gambar dari assets
     ),
     NotificationItem(
       username: 'jesica_r',
       action: 'mengomentari postingan Anda',
       timestamp: DateTime.now().subtract(Duration(days: 1)), // 1 hari lalu
-      profileImageUrl: 'assets/images/jesica_r.jpg', // Gambar dari assets
+      profileImageUrl: 'assets/profil-nashya.jpg', // Gambar dari assets
     ),
     NotificationItem(
       username: 'raisa_monn',
       action: 'mulai mengikuti Anda',
       timestamp: DateTime.now().subtract(Duration(minutes: 0)), // 1 minggu lalu
-      profileImageUrl: 'assets/images/raisa_monn.jpg', // Gambar dari assets
+      profileImageUrl: 'assets/profil-nashya.jpg', // Gambar dari assets
     ),
   ].obs;
 }

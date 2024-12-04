@@ -24,7 +24,6 @@ class ProfileController extends GetxController {
     }
     posts.value = postDetails.length; // Perbarui jumlah postingan
   }
-
   void updateProfile(String newName, String newUsername, String newBio,
       String newProfileImage) {
     name.value = newName;
@@ -39,4 +38,5 @@ class ProfileController extends GetxController {
     photos.insert(0, post['photo']!); // Tambahkan foto di awal daftar
     posts.value = postDetails.length; // Perbarui jumlah postingan
   }
+
 }
