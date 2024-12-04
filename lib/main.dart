@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
       home: LoginView(),
       debugShowCheckedModeBanner: false,
       getPages: [
+        GetPage(name: '/login', page: () => LoginView()),
         GetPage(name: '/home', page: () => HomeView()),
         GetPage(name: '/addPost', page: () => PhotoPickerScreen()),
         GetPage(name: '/addPost2', page: () => ShareScreen()),
