@@ -58,6 +58,49 @@ class SearchView extends GetView<app_controller.SearchController> {
           },
         );
       }),
+      bottomNavigationBar: BottomNavigationBar(
+  currentIndex: 1, // Search = index 1
+  onTap: (index) {
+    if (index == 0) {
+      Get.toNamed('/home');
+    } else if (index == 1) {
+      // Tetap di halaman SearchView
+      Get.to(() => const SearchView());
+    } else if (index == 2) {
+      Get.toNamed('/addPost');
+    } else if (index == 3) {
+      Get.toNamed('/notifications');
+    } else if (index == 4) {
+      Get.toNamed('/profile');
+    }
+  },
+  type: BottomNavigationBarType.fixed,
+  showSelectedLabels: false,
+  showUnselectedLabels: false,
+  items: const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: '',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.search),
+      label: '',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.add_box_outlined),
+      label: '',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.favorite_border),
+      label: '',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person_outline),
+      label: '',
+    ),
+  ],
+),
+
     );
   }
 }
