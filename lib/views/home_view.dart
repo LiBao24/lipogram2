@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lipogram/controller/home_controller.dart';
+import 'package:lipogram/controllers/home_controller.dart';
 
-class HomePage extends StatelessWidget {
+class HomeView extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
 
-  HomePage({super.key});
+  HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {

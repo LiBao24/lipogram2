@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lipogram/controller/login_controller.dart';
-import 'package:lipogram/view/home_view.dart';
+import 'package:lipogram/controllers/login_controller.dart';
+import 'package:lipogram/views/home_view.dart';
 
 class LoginView extends StatelessWidget {
   final LoginController controller = Get.put(LoginController());
@@ -134,7 +134,7 @@ class LoginView extends StatelessWidget {
                                   // Jika semua field terisi, jalankan fungsi login
                                   controller.login();
                                   // Navigasi ke HomePage setelah login berhasil
-                                  Get.to(() => HomePage());
+                                  Get.to(() => HomeView());
                                 }
                               },
                         style: ElevatedButton.styleFrom(

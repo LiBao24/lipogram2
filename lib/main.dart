@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'view/login_view.dart';
-import 'package:lipogram/view/profile_view.dart';
-import 'package:lipogram/view/home_view.dart';
+import 'views/login_view.dart';
+import 'package:lipogram/views/profile_view.dart';
+import 'package:lipogram/views/home_view.dart';
+import 'package:lipogram/views/photo_view.dart';
+import 'package:lipogram/views/posting_view.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -29,9 +32,23 @@ class MyApp extends StatelessWidget {
       home: LoginView(),
       debugShowCheckedModeBanner: false,
       getPages: [
-        GetPage(name: '/home', page: () => HomePage()),
+        GetPage(name: '/home', page: () => HomeView()),
+        GetPage(name: '/addPost', page: () => PhotoPickerScreen()),
+        GetPage(name: '/addPost2', page: () => ShareScreen()),
         GetPage(name: '/profile', page: () => ProfileView()),
       ],
     );
+  }
+}
+
+Future<void> requestPermissions() async {
+  // Meminta izin kamera
+  if (await Permission.camera.isDenied) {
+    await Permission.camera.request();
+  }
+
+  // Meminta izin akses galeri
+  if (await Permission.photos.isDenied) {
+    await Permission.photos.request();
   }
 }
