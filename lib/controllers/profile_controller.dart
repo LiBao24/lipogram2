@@ -1,20 +1,23 @@
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
-  // Data profil pengguna
-  final username = 'its_ivyyyy'.obs;
-  final name = 'Jovianka Ivy'.obs;
-  final bio = 'living like i should'.obs;
+  // Declare reactive variables
+  var name = 'Jovianka Ivy'.obs;
+  var username = 'its_ivyyyy'.obs;
+  var bio = 'living like i should'.obs;
+  var posts = 10.obs; // Example data
+  var followers = '500'.obs; // Example data
+  var following = 150.obs; // Example data
+  var photos =
+      ['assets/photo1.jpg', 'assets/photo2.jpg', 'assets/photo3.jpg'].obs;
+  var profileImage = 'assets/image/profile.png'.obs;
 
-  // Statistik profil
-  final posts = 3.obs;
-  final followers = '2,7JT'.obs;
-  final following = 0.obs;
-
-  // Daftar foto untuk ditampilkan dalam grid
-  final photos = [
-    'assets/post-ivy-1.jpg',
-    'assets/post-ivy-2.jpg',
-    'assets/post-ivy-3.jpg',
-  ].obs;
+  // Method to update profile data
+  void updateProfile(String newName, String newUsername, String newBio,
+      String newProfileImage) {
+    name.value = newName;
+    username.value = newUsername;
+    bio.value = newBio;
+    profileImage.value = newProfileImage;
+  }
 }

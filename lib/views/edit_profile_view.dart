@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
-import '../controllers/edit_profile_controller.dart';
+import 'package:lipogram/controllers/edit_profile_controller.dart';
 import '../controllers/profile_controller.dart'; // Import ProfileController
 
 class EditProfileView extends StatelessWidget {
   final EditProfileController controller = Get.put(EditProfileController());
-  final ProfileController profileController = Get.find();  // Get existing ProfileController
+  final ProfileController profileController =
+      Get.find(); // Get existing ProfileController
 
   @override
   Widget build(BuildContext context) {
     final nameController = TextEditingController(text: controller.name.value);
-    final usernameController = TextEditingController(text: controller.username.value);
+    final usernameController =
+        TextEditingController(text: controller.username.value);
     final bioController = TextEditingController(text: controller.bio.value);
 
     return Scaffold(
@@ -49,9 +51,12 @@ class EditProfileView extends StatelessWidget {
                   Obx(() {
                     return CircleAvatar(
                       radius: 50,
-                      backgroundImage: controller.profileImage.value.contains('assets/')
-                          ? AssetImage(controller.profileImage.value) as ImageProvider
-                          : FileImage(File(controller.profileImage.value)), // Handle local file images
+                      backgroundImage:
+                          controller.profileImage.value.contains('assets/')
+                              ? AssetImage(controller.profileImage.value)
+                                  as ImageProvider
+                              : FileImage(File(controller.profileImage
+                                  .value)), // Handle local file images
                       backgroundColor: Colors.grey[200],
                     );
                   }),

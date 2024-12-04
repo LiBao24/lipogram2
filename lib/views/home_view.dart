@@ -4,7 +4,6 @@ import 'package:lipogram/controllers/home_controller.dart';
 import 'comment_bottom_sheet.dart'; // Import untuk komentar
 import 'likes_bottom_sheet.dart'; // Import untuk daftar like
 
-
 class HomeView extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
 
@@ -38,7 +37,7 @@ class HomeView extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundImage:
-                        AssetImage('assets/profile/nashya.png'), // Profil image
+                        AssetImage('assets/post-nashya.jpg'), // Profil image
                     radius: 25,
                   ),
                   SizedBox(width: 10),
@@ -54,7 +53,7 @@ class HomeView extends StatelessWidget {
             ),
             // Gambar Postingan
             Image.asset(
-              'assets/post-nashya.png',
+              'assets/post-nashya.jpg',
               fit: BoxFit.cover,
               height: 400,
               width: double.infinity, // Lebar penuh
@@ -93,7 +92,8 @@ class HomeView extends StatelessWidget {
                       // Menampilkan daftar likes dalam modal bottom sheet
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) => const LikesBottomSheet(),
+                        builder: (BuildContext context) =>
+                            const LikesBottomSheet(),
                       );
                     },
                     child: Obx(() => Text(
@@ -109,9 +109,8 @@ class HomeView extends StatelessWidget {
                       // Menampilkan komentar dalam modal bottom sheet
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) =>  CommentBottomSheet(),
+                        builder: (BuildContext context) => CommentBottomSheet(),
                       );
-
                     },
                     icon: const Icon(Icons.comment),
                   ),
