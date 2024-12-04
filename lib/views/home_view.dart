@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/home_controller.dart';
+import 'package:myapp/controllers/home_controller.dart';
+import 'package:myapp/controllers/comment_controller.dart';  // Import controller komentar
 import 'comment_bottom_sheet.dart'; // Import untuk komentar
 import 'likes_bottom_sheet.dart'; // Import untuk daftar like
 
 class HomeView extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
+  final CommentController commentControllerGet = Get.put(CommentController());  // Controller komentar
 
   HomeView({super.key});
 
@@ -36,8 +38,7 @@ class HomeView extends StatelessWidget {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/profile/nashya.png'), // Profil image
+                    backgroundImage: AssetImage('assets/profile/nashya.png'), // Profil image
                     radius: 25,
                   ),
                   SizedBox(width: 10),
@@ -108,14 +109,14 @@ class HomeView extends StatelessWidget {
                       // Menampilkan komentar dalam modal bottom sheet
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) =>  CommentBottomSheet(),
+                        builder: (BuildContext context) => CommentBottomSheet(),
                       );
                     },
                     icon: const Icon(Icons.comment),
                   ),
                   // Jumlah Komentar
                   Obx(() => Text(
-                        '${homeController.comments.value} comments',
+                        '${commentControllerGet.commentsList.length} comments',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       )),
                 ],

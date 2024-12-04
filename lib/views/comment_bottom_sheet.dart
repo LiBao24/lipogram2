@@ -1,96 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lipogram/controllers/home_controller.dart';
+import 'package:myapp/controllers/comment_controller.dart';
 
 class CommentBottomSheet extends StatelessWidget {
   final TextEditingController commentController = TextEditingController();
+  final CommentController commentControllerGet = Get.put(CommentController());
 
   CommentBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = Get.find();
+    return GestureDetector(
+      onTap: () {
+        // Menyembunyikan keyboard saat menekan di luar teks field
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.transparent, // Mengatur latar belakang menjadi transparan
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Padding untuk menghindari elemen terlalu dekat dengan tepi
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.75, // Membuat popup lebih tinggi (75% dari tinggi layar)
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.0), // Menambahkan radius sudut untuk desain yang lebih halus
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Komentar',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Center(
-            child: Text(
-              'Comments',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+                  // Daftar komentar menggunakan Obx
+                  Expanded(
+                    child: Obx(
+                      () => ListView.builder(
+                        itemCount: commentControllerGet.commentsList.length,
+                        itemBuilder: (context, index) {
+                          final comment = commentControllerGet.commentsList[index];
+                          return _buildCommentTile(comment['text']!);
+                        },
+                      ),
+                    ),
+                  ),
+
+                  // Input komentar dan tombol kirim
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: commentController,
+                            decoration: InputDecoration(
+                              labelText: 'Tambahkan komentar',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          onPressed: () {
+                            // Menambahkan komentar setelah tombol kirim ditekan
+                            if (commentController.text.trim().isNotEmpty) {
+                              commentControllerGet.addComment(commentController.text);
+                              commentController.clear(); // Membersihkan teks setelah mengirim
+                            }
+                          },
+                          icon: const Icon(Icons.send),
+                          color: Colors.blue,
+                          tooltip: 'Kirim komentar',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: Obx(() => homeController.commentsList.isEmpty
-                ? const Center(child: Text('No comments yet.'))
-                : ListView.builder(
-                    itemCount: homeController.commentsList.length,
-                    itemBuilder: (context, index) {
-                      final comment = homeController.commentsList[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: AssetImage(
-                                  comment['profilePic'] ?? 'assets/default_profile.png'),
-                              radius: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    comment['username'] ?? 'Anonymous',
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(comment['comment'] ?? ''),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  )),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: commentController,
-                  decoration: const InputDecoration(
-                    hintText: 'Add a comment...',
-                    border: OutlineInputBorder(),
-                  ),
-                  maxLines: 1,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  if (commentController.text.trim().isNotEmpty) {
-                    homeController.addComment({
-                      'username': 'its_ivyyyy',
-                      'comment': commentController.text.trim(),
-                      'profilePic': 'assets/profile/user3.png',
-                    });
-                    commentController.clear();
-                  }
-                },
-                icon: const Icon(Icons.send),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildCommentTile(String comment) {
+    return ListTile(
+      leading: const CircleAvatar(
+        backgroundImage: AssetImage('assets/profile/nashya.png'),
+        radius: 15,
+      ),
+      title: const Text(
+        'its_ivyyyy',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text(comment),
     );
   }
 }
