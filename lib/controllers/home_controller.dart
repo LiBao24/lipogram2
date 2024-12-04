@@ -27,4 +27,5 @@ class HomeController extends GetxController {
     commentsList.add(comment);
     comments.value++;
   }
+
 }

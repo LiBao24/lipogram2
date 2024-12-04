@@ -2,12 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lipogram/controllers/profile_controller.dart';
 import 'package:lipogram/views/edit_profile_view.dart';
+import 'package:lipogram/views/login_view.dart';
 import 'dart:io';
 
 class ProfileView extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
 
   ProfileView({super.key});
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Perform logout action here (e.g., clear session or data)
+                Get.offAll(() => LoginView()); // Navigate to login screen
+              },
+              child: Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +46,25 @@ class ProfileView extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Obx(() => Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                controller.username.value,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Arial',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                children: [
+                  Text(
+                    controller.username.value,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Arial',
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_drop_down),
+                    onPressed: () {
+                      _showLogoutDialog(context); // Logout when pressed
+                    },
+                  ),
+                ],
               ),
             )),
       ),

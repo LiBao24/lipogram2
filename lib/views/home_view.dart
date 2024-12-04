@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myapp/controllers/home_controller.dart';
-import 'package:myapp/controllers/comment_controller.dart';  // Import controller komentar
+import 'package:lipogram/controllers/home_controller.dart';
+import 'package:lipogram/controllers/comment_controller.dart';  // Import controller komentar
+import 'package:lipogram/controllers/home_controller.dart';
 import 'comment_bottom_sheet.dart'; // Import untuk komentar
 import 'likes_bottom_sheet.dart'; // Import untuk daftar like
 
@@ -38,7 +39,8 @@ class HomeView extends StatelessWidget {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage('assets/profile/nashya.png'), // Profil image
+                    backgroundImage:
+                        AssetImage('assets/post-nashya.jpg'), // Profil image
                     radius: 25,
                   ),
                   SizedBox(width: 10),
@@ -54,7 +56,7 @@ class HomeView extends StatelessWidget {
             ),
             // Gambar Postingan
             Image.asset(
-              'assets/post-nashya.png',
+              'assets/post-nashya.jpg',
               fit: BoxFit.cover,
               height: 400,
               width: double.infinity, // Lebar penuh
@@ -93,7 +95,8 @@ class HomeView extends StatelessWidget {
                       // Menampilkan daftar likes dalam modal bottom sheet
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) => const LikesBottomSheet(),
+                        builder: (BuildContext context) =>
+                            const LikesBottomSheet(),
                       );
                     },
                     child: Obx(() => Text(
