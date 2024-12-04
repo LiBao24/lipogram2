@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lipogram/controllers/home_controller.dart';
+import '../controllers/home_controller.dart';
+import 'comment_bottom_sheet.dart'; // Import untuk komentar
+import 'likes_bottom_sheet.dart'; // Import untuk daftar like
 
 class HomeView extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -83,17 +85,32 @@ class HomeView extends StatelessWidget {
                               : Colors.grey,
                         ),
                       )),
+
                   // Jumlah Likes
-                  Obx(() => Text(
-                        '${homeController.likes.value} likes',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      )),
+                  GestureDetector(
+                    onTap: () {
+                      // Menampilkan daftar likes dalam modal bottom sheet
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => const LikesBottomSheet(),
+                      );
+                    },
+                    child: Obx(() => Text(
+                          '${homeController.likes.value} likes',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                  ),
                   const SizedBox(width: 16),
 
                   // Tombol Komentar
                   IconButton(
                     onPressed: () {
-                      // Aksi untuk membuka bagian komentar
+                      // Menampilkan komentar dalam modal bottom sheet
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) =>  CommentBottomSheet(),
+                      );
+
                     },
                     icon: const Icon(Icons.comment),
                   ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lipogram/controllers/profile_controller.dart';
+import 'package:lipogram/views/edit_profile_view.dart';
+import 'dart:io';
 
 class ProfileView extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
@@ -13,11 +15,11 @@ class ProfileView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        automaticallyImplyLeading: false, // Menghapus tanda panah kembali
+        automaticallyImplyLeading: false,
         title: Obx(() => Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                controller.username.value, // Username ditampilkan
+                controller.username.value,
                 style: const TextStyle(
                   color: Colors.black,
                   fontFamily: 'Arial',
@@ -33,18 +35,24 @@ class ProfileView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Foto profil dan statistik
+
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Foto profil
-                  const CircleAvatar(
-                    backgroundImage: AssetImage('assets/profil-ivy.jpg'),
-                    radius: 40,
-                  ),
+                  Obx(() {
+                    return CircleAvatar(
+                      radius: 40,
+                      backgroundImage:
+                          controller.profileImage.value.contains('assets/')
+                              ? AssetImage(controller.profileImage.value)
+                                  as ImageProvider
+                              : FileImage(File(controller.profileImage
+                                  .value)), // Handle local file images
+                      backgroundColor: Colors.grey[200],
+                    );
+                  }),
                   const SizedBox(width: 20),
 
-                  // Statistik
                   Expanded(
                     child: Obx(() => Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -101,7 +109,6 @@ class ProfileView extends StatelessWidget {
               ),
               const SizedBox(height: 15),
 
-              // Nama lengkap dan bio
               Obx(() => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -122,37 +129,29 @@ class ProfileView extends StatelessWidget {
                   )),
               const SizedBox(height: 13),
 
-              // Tombol Edit Profil
               SizedBox(
-                width: double.infinity, // Tombol memenuhi lebar layar
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Aksi ketika tombol ditekan
+                    Get.to(EditProfileView());
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black, // Warna teks
-                    backgroundColor:
-                        Colors.grey[200], // Warna background tombol
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.grey[200],
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(8), // Radius sudut tombol
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    minimumSize:
-                        const Size(0, 28), // Atur tinggi minimum tombol
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16), // Kurangi padding vertikal
+                    minimumSize: const Size(0, 28),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                   ),
                   child: const Text(
                     'Edit Profil',
-                    style:
-                        TextStyle(fontSize: 13), // Sesuaikan ukuran font teks
+                    style: TextStyle(fontSize: 13),
                   ),
                 ),
               ),
-
               const SizedBox(height: 18),
 
-              // Grid Foto (3 Postingan)
               Obx(() => GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -165,7 +164,7 @@ class ProfileView extends StatelessWidget {
                     itemCount: controller.photos.length,
                     itemBuilder: (context, index) {
                       return ClipRRect(
-                        // borderRadius: BorderRadius.circular(1),
+
                         child: Image.asset(
                           controller.photos[index],
                           fit: BoxFit.cover,
@@ -178,22 +177,18 @@ class ProfileView extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 4, // Profile = index 4
+        currentIndex: 4,
         onTap: (index) {
           if (index == 0) {
-            // Pindah ke Home
             Get.toNamed('/home');
           } else if (index == 1) {
-            // Pindah ke Search
             Get.toNamed('/search');
           } else if (index == 2) {
-            // Pindah ke Add Post
             Get.toNamed('/addPost');
           } else if (index == 3) {
-            // Pindah ke Notifikasi
             Get.toNamed('/notifications');
           } else if (index == 4) {
-            // Tetap di Profile
+
             Get.toNamed('/profile');
           }
         },
