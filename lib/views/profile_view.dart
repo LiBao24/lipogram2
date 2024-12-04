@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/user_model.dart';
 import 'image_view.dart';
-import 'search_view.dart'; 
+import 'search_view.dart';
 
 class ProfileView extends StatelessWidget {
   final User user;
+  final RxBool isFollowing = false.obs;
 
-  const ProfileView({super.key, required this.user});
+  ProfileView({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -56,18 +57,25 @@ class ProfileView extends StatelessWidget {
                   const SizedBox(height: 18),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('Follow'),
-                    ),
+                    child: Obx(() => ElevatedButton(
+                          onPressed: () {
+                            isFollowing.value = !isFollowing.value; 
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: isFollowing.value
+                                ? Colors.grey
+                                : Colors.blue,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: Text(
+                            isFollowing.value ? 'Mengikuti' : 'Follow',
+                          ),
+                        )),
                   ),
                 ],
               ),
             ),
+
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -95,6 +103,7 @@ class ProfileView extends StatelessWidget {
           ],
         ),
       ),
+      
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 4, // Profile = index 4
         onTap: (index) {
