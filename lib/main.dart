@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:get/get.dart';
+import 'views/login_view.dart';
+import 'package:lipogram/views/signup_view.dart';
+import 'package:lipogram/views/profile_view.dart';
+import 'package:lipogram/views/home_view.dart';
+>>>>>>> Stashed changes
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +39,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+<<<<<<< Updated upstream
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -120,6 +129,15 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+=======
+      home: LoginView(),
+      debugShowCheckedModeBanner: false,
+      getPages: [
+        GetPage(name: '/signup', page: () => SignUpView()),
+        GetPage(name: '/home', page: () => HomeView()),
+        GetPage(name: '/profile', page: () => ProfileView()),
+      ],
+>>>>>>> Stashed changes
     );
   }
 }
