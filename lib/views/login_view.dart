@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lipogram/controllers/login_controller.dart';
-import 'package:lipogram/views/signup_view.dart';
-import 'package:lipogram/views/home_view.dart';
+import '../controllers/login_controller.dart';
+import '../views/signup_view.dart';
+import '../views/home_view.dart';
 
 class LoginView extends StatelessWidget {
   final LoginController controller = Get.put(LoginController());
@@ -132,9 +132,7 @@ class LoginView extends StatelessWidget {
                                     colorText: Colors.white,
                                   );
                                 } else {
-                                  // Jika semua field terisi, jalankan fungsi login
                                   controller.login();
-                                  // Navigasi ke HomePage setelah login berhasil
                                   Get.to(() => HomeView());
                                 }
                               },

@@ -1,4 +1,8 @@
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../controllers/profile_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
   var likesList = <Map<String, String>>[].obs;
@@ -8,19 +12,40 @@ class HomeController extends GetxController {
   var likes = 0.obs;
   var comments = 0.obs;
 
-  var hasPost = false.obs; // Untuk memeriksa apakah ada postingan baru
+  var hasPost = false.obs;
+  
+  var username = ''.obs;
+  var profileImage = ''.obs;
+
+  final ProfileController profileController = Get.put(ProfileController());
+
+  @override
+  void onInit() async {
+    super.onInit();
+    int userId = await getUserIdFromPreferences();
+    profileController.fetchProfile(userId);
+    ever(profileController.profileImage, (callback) {
+      profileImage.value = profileController.profileImage.value;
+      username.value = profileController.name.value;
+    });
+  }
+
+  Future<int> getUserIdFromPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('user_id') ?? 0;
+  }
 
   void toggleLike() {
     if (isLiked.value) {
       isLiked.value = false;
       likes.value--;
-      likesList.removeWhere((user) => user['username'] == 'its_ivyyyy');
+      likesList.removeWhere((user) => user['username'] == username.value);
     } else {
       isLiked.value = true;
       likes.value++;
       likesList.add({
-        'username': 'its_ivyyyy',
-        'profilePic': 'assets/profil-ivy.jpg',
+        'username': username.value,
+        'profilePic': profileImage.value,
       });
     }
   }
@@ -31,7 +56,7 @@ class HomeController extends GetxController {
   }
 
   void createPost() {
-    hasPost.value = true; // Setel menjadi true ketika ada postingan baru
+    hasPost.value = true;
   }
 
   void deletePost() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myapp/controllers/comment_controller.dart';
+import '../controllers/comment_controller.dart';
 
 class CommentBottomSheet extends StatelessWidget {
   final TextEditingController commentController = TextEditingController();

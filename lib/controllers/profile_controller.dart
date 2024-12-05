@@ -1,42 +1,66 @@
+import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import '../utils/api_url.dart';
 
 class ProfileController extends GetxController {
-  // Declare reactive variables
-  var name = 'Jovianka Ivy'.obs;
-  var username = 'its_ivyyyy'.obs;
-  var bio = 'living like i should'.obs;
-  var posts = 10.obs; // Example data
-  var followers = '500'.obs; // Example data
-  var following = 150.obs; // Example data
-  var photos = [
-    'assets/post-ivy-1.jpg',
-    'assets/post-ivy-2.jpg',
-    'assets/post-ivy-3.jpg'
-  ].obs;
-  var profileImage = 'assets/profil-ivy.jpg'.obs;
+  var name = ''.obs;
+  var username = ''.obs;
+  var bio = ''.obs;
+  var posts = 0.obs;
+  var followers = '0'.obs;
+  var following = 0.obs;
+  var photos = <String>[].obs;
+  var profileImage = ''.obs;
 
-  var postDetails = <Map<String, String>>[].obs; // Menyimpan detail postingan
+  var postDetails = <Map<String, String>>[].obs;
 
   ProfileController() {
-    // Tambahkan postingan awal ke postDetails
     for (var photo in photos) {
       postDetails.add({'photo': photo});
     }
-    posts.value = postDetails.length; // Perbarui jumlah postingan
-  }
-  void updateProfile(String newName, String newUsername, String newBio,
-      String newProfileImage) {
-    name.value = newName;
-    username.value = newUsername;
-    bio.value = newBio;
-    profileImage.value = newProfileImage;
+    posts.value = postDetails.length;
   }
 
-  // Fungsi untuk menambahkan postingan baru
   void addPost(Map<String, String> post) {
-    postDetails.insert(0, post); // Tambahkan postingan di awal daftar
-    photos.insert(0, post['photo']!); // Tambahkan foto di awal daftar
-    posts.value = postDetails.length; // Perbarui jumlah postingan
+    postDetails.insert(0, post);
+    photos.insert(0, post['photo']!);
+    posts.value = postDetails.length;
   }
 
+  Future<void> fetchProfile(int id) async {
+    try {
+      final response = await http.get(Uri.parse('$apiBaseUrl/profiles/$id'));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body)['profile'];
+        name.value = data['nama'];
+        bio.value = data['bio'];
+        profileImage.value = data['foto_profil'];
+      } else {
+        Get.snackbar('Error', 'Failed to fetch profile');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred');
+    }
+  }
+
+  Future<void> updateProfile(Map<String, String> updatedData) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$apiBaseUrl/profiles/${updatedData["id"]}'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(updatedData),
+      );
+      if (response.statusCode == 200) {
+        final updatedProfile = json.decode(response.body)['profile'];
+        name.value = updatedProfile['nama'];
+        bio.value = updatedProfile['bio'];
+        profileImage.value = updatedProfile['foto_profil'];
+      } else {
+        Get.snackbar('Error', 'Failed to update profile');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred');
+    }
+  }
 }

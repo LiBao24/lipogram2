@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lipogram/controllers/photo_controller.dart';
+import '../controllers/photo_controller.dart';
+import '../controllers/post_controller.dart';
+import '../models/post.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShareScreen extends StatelessWidget {
+  final PostController postController = Get.put(PostController());
   final PhotoController controller = Get.find<PhotoController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Postingan baru"),
+        title: const Text("Postingan Baru"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -18,48 +22,42 @@ class ShareScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        // Tambahkan ini
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Tampilkan foto yang dipilih
             Obx(() => controller.selectedPhoto.value != null
                 ? Image.file(
                     controller.selectedPhoto.value!,
                     width: double.infinity,
-                    height: 300, // Tinggi foto diperbesar
+                    height: 300,
                     fit: BoxFit.cover,
                   )
                 : Container(
                     color: Colors.grey[200],
                     width: double.infinity,
-                    height: 300, // Tinggi default saat foto tidak ada
+                    height: 300,
                     child: const Center(
-                        child: Text("Tidak ada foto yang dipilih")),
-                  )),
-            const SizedBox(height: 12), // Jarak antar komponen
-            // Form deskripsi
+                        child: Text("Tidak ada foto yang dipilih"))),
+            ),
+            const SizedBox(height: 12),
+            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
                 onChanged: controller.updateDescription,
-                style: const TextStyle(fontSize: 14), // Ukuran teks lebih kecil
+                style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
                   labelText: 'Tambah deskripsi',
-                  labelStyle: const TextStyle(
-                      fontSize: 14, color: Colors.grey), // Warna abu-abu
+                  labelStyle: const TextStyle(fontSize: 14, color: Colors.grey),
                   border: OutlineInputBorder(
-                    // Border biasa
                     borderRadius: BorderRadius.circular(6),
                     borderSide: const BorderSide(color: Colors.grey, width: 1),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    // Border saat tidak fokus
                     borderRadius: BorderRadius.circular(6),
                     borderSide: const BorderSide(color: Colors.grey, width: 1),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    // Border saat fokus
                     borderRadius: BorderRadius.circular(6),
                     borderSide: const BorderSide(
                         color: Color.fromARGB(255, 54, 54, 54), width: 2),
@@ -67,29 +65,36 @@ class ShareScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12), // Jarak antar komponen
-            // Tombol Bagikan
+            const SizedBox(height: 12),
+            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF469FC0), // Warna biru terang
-                  minimumSize: const Size(
-                      double.infinity, 48), // Lebar penuh dan tinggi tombol
+                  backgroundColor: const Color(0xFF469FC0),
+                  minimumSize: const Size(double.infinity, 48),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(6), // Radius sesuai gambar
+                    borderRadius: BorderRadius.circular(6),
                   ),
                 ),
-                onPressed: controller.sharePhoto,
-                child: const Text(
-                  "Bagikan",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                onPressed: () async {
+                  if (controller.selectedPhoto.value != null &&
+                      controller.photoDescription.value.isNotEmpty) {
+                    final prefs = await SharedPreferences.getInstance();
+                    final userId = prefs.getInt('userId') ?? 0;
+
+                    final newPost = Post(
+                      idPost: 0,
+                      idUser: userId,
+                      media: controller.selectedPhoto.value!.path,
+                      caption: controller.photoDescription.value,
+                    );
+                    postController.sharePost(newPost);
+                  } else {
+                    Get.snackbar('Error', 'Pilih foto dan tambahkan deskripsi terlebih dahulu');
+                  }
+                },
+                child: const Text('Bagikan', style: TextStyle(fontSize: 16)),
               ),
             ),
           ],

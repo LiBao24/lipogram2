@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lipogram/controllers/home_controller.dart';
-import 'package:lipogram/controllers/profile_controller.dart';
-import 'package:lipogram/controllers/comment_controller.dart';  // Import controller komentar
-import 'comment_bottom_sheet.dart'; // Import untuk komentar
-import 'likes_bottom_sheet.dart'; // Import untuk daftar like
+import '../controllers/home_controller.dart';
+import '../controllers/profile_controller.dart';
+import '../controllers/comment_controller.dart';
+import 'comment_bottom_sheet.dart';
+import 'likes_bottom_sheet.dart';
 
 class HomeView extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -32,7 +32,6 @@ class HomeView extends StatelessWidget {
         homeController.deletePost(); // Hapus status postingan jika data kosong
       });
     }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -57,7 +56,6 @@ class HomeView extends StatelessWidget {
               if (!homeController.hasPost.value) {
                 return const SizedBox(); // Jangan tampilkan apa pun jika belum ada post
               }
-
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -68,17 +66,23 @@ class HomeView extends StatelessWidget {
                       children: [
                         Obx(() {
                           return CircleAvatar(
-                            backgroundImage: profileController
-                                    .profileImage.value
-                                    .contains('assets/')
-                                ? AssetImage(
-                                        profileController.profileImage.value)
-                                    as ImageProvider
-                                : FileImage(
-                                    File(profileController.profileImage.value)),
+                            backgroundImage: NetworkImage(homeController.profileImage.value),
                             radius: 25,
                           );
                         }),
+                        // Obx(() {
+                        //   return CircleAvatar(
+                        //     backgroundImage: profileController
+                        //             .profileImage.value
+                        //             .contains('assets/')
+                        //         ? AssetImage(
+                        //                 profileController.profileImage.value)
+                        //             as ImageProvider
+                        //         : FileImage(
+                        //             File(profileController.profileImage.value)),
+                        //     radius: 25,
+                        //   );
+                        // }),
                         const SizedBox(width: 10),
                         Obx(() {
                           return Text(

@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lipogram/controllers/profile_controller.dart';
-import 'package:lipogram/views/edit_profile_view.dart';
-import 'package:lipogram/views/login_view.dart';
+import '../controllers/profile_controller.dart';
+import '../views/edit_profile_view.dart';
+import '../views/login_view.dart';
 
 class ProfileView extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
